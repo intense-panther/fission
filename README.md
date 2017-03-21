@@ -130,6 +130,27 @@ If you're using minikube, use these commands:
   $ export FISSION_ROUTER=$(minikube ip):31314
 ```
 
+### Get and Run Fission: Minishift
+
+First make sure you've compiled and pushed a new fission-bundle docker
+image using the version minishiftalpha1.
+
+```
+  $ pushd fission-bundle
+  $ ./build.sh
+  $ docker build -t fission-bundle .
+  $ docker tag fission-bundle fission/fission-bundle:minishiftalpha1
+  $ popd
+```
+
+Then, deploy the fission pieces into your current project and set the
+necessary environment variables:
+
+```
+  $ oc create -f fission-minishift.yaml
+  $ export FISSION_URL=http://$(minishift ip):31313
+  $ export FISSION_ROUTER=$(minishift ip):31314
+```
 
 ### Get and Run Fission: GKE or other Cloud
 

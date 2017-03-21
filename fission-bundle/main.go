@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"log"
 	"strconv"
 
@@ -89,7 +90,7 @@ Options:
   --routerUrl=<url>        Router URL.
   --etcdUrl=<etcdUrl>      Etcd URL.
   --filepath=<filepath>    Directory to store functions in.
-  --namespace=<namespace>  Kubernetes namespace in which to run function containers. Defaults to 'fission-function'.
+  --namespace=<namespace>  Kubernetes namespace in which to run function containers. Defaults to the current namespace on OpenShift or 'fission-function' otherwise.
   --kubewatcher            Start Kubernetes events watcher.
 `
 	arguments, err := docopt.Parse(usage, nil, true, "fission-bundle", false)
@@ -97,7 +98,12 @@ Options:
 		log.Fatalf("Error: %v", err)
 	}
 
-	namespace := getStringArgWithDefault(arguments["--namespace"], "fission-function")
+	defaultNamespace := "fission-function"
+	nsBuf, err := ioutil.ReadFile("/var/run/secrets/kubernetes.io/serviceaccount/namespace")
+	if err == nil {
+		defaultNamespace = string(nsBuf)
+	}
+	namespace := getStringArgWithDefault(arguments["--namespace"], defaultNamespace)
 
 	controllerUrl := getStringArgWithDefault(arguments["--controllerUrl"], "http://controller.fission")
 	etcdUrl := getStringArgWithDefault(arguments["--etcdUrl"], "http://etcd:2379")
