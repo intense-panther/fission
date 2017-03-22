@@ -148,11 +148,10 @@ metadata:
   labels:
     svc: router
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
   - port: 80
     targetPort: 8888
-    nodePort: 31314
   selector:
     svc: router
 
@@ -164,10 +163,37 @@ metadata:
   labels:
     svc: controller
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
   - port: 80
     targetPort: 8888
-    nodePort: 31313
   selector:
     svc: controller
+
+---
+apiVersion: v1
+kind: Route
+metadata:
+  name: controller
+  labels:
+    svc: controller
+spec:
+  port:
+    targetPort: 8888
+  to:
+    kind: Service
+    name: controller
+
+---
+apiVersion: v1
+kind: Route
+metadata:
+  name: router
+  labels:
+    svc: router
+spec:
+  port:
+    targetPort: 8888
+  to:
+    kind: Service
+    name: router

@@ -148,8 +148,8 @@ necessary environment variables:
 
 ```
   $ oc create -f fission-minishift.yaml
-  $ export FISSION_URL=http://$(minishift ip):31313
-  $ export FISSION_ROUTER=$(minishift ip):31314
+  $ export FISSION_URL=http://$(oc get route controller -o jsonpath='{..spec.host}')
+  $ export FISSION_ROUTER=$(oc get route router -o jsonpath='{..spec.host}')
 ```
 
 ### Get and Run Fission: GKE or other Cloud
