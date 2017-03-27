@@ -14,8 +14,8 @@ subjects:
 - kind: ServiceAccount
   name: fission
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: DeploymentConfig
 metadata:
   name: controller
 spec:
@@ -33,8 +33,8 @@ spec:
       serviceAccountName: fission
 
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: DeploymentConfig
 metadata:
   name: router
 spec:
@@ -66,8 +66,8 @@ spec:
     svc: poolmgr
 
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: DeploymentConfig
 metadata:
   name: poolmgr
 spec:
@@ -85,8 +85,8 @@ spec:
       serviceAccountName: fission
 
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: DeploymentConfig
 metadata:
   name: kubewatcher
 spec:
@@ -118,8 +118,8 @@ spec:
     svc: etcd
 
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: DeploymentConfig
 metadata:
   name: etcd
 spec:
@@ -178,8 +178,6 @@ metadata:
   labels:
     svc: controller
 spec:
-  port:
-    targetPort: 8888
   to:
     kind: Service
     name: controller
@@ -192,8 +190,6 @@ metadata:
   labels:
     svc: router
 spec:
-  port:
-    targetPort: 8888
   to:
     kind: Service
     name: router
